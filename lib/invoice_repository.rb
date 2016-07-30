@@ -54,12 +54,6 @@ class InvoiceRepository
     end
   end
 
-  # def return_all_customers_for_merchant(merchant_id)
-  #   find_all_by_merchant_id(merchant_id).map do |invoice|
-  #     invoice.customer
-  #   end.compact.uniq
-  # end
-
 #just for the spec harness
   def inspect
   end

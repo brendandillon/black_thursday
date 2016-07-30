@@ -18,7 +18,7 @@ class InvoiceItem
     @id = datum[:id].to_i
     @item_id = datum[:item_id].to_i
     @invoice_id = datum[:invoice_id].to_i
-    @quantity = datum[:quantity]
+    @quantity = datum[:quantity].to_i
     @unit_price = convert_to_big_decimal(datum[:unit_price])
     @created_at = Time.parse(datum[:created_at])
     @updated_at = Time.parse(datum[:updated_at])
