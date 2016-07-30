@@ -1,4 +1,4 @@
-
+require 'pry'
 class Invoice
 
   attr_reader :id,
@@ -38,5 +38,28 @@ class Invoice
       end.compact.uniq
     end
   end
+
+  def invoice_items
+    parent_repo.find_invoice_items(id)
+  end
+
+  def check_results(transactions)
+    transactions.find_all do |transaction|
+      transaction.result == "success"
+    end
+  end
+
+  def is_paid_in_full?
+    check_results(transactions).length > 0
+  end
+
+  def total
+    invoice_items.reduce(0) do |amount, invoice_item|
+      amount += (invoice_item.quantity * invoice_item.unit_price)
+      amount
+    end
+  end
+
+
 
 end

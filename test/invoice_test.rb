@@ -51,7 +51,7 @@ class InvoiceTest < Minitest::Test
     invoice = se.invoices.find_by_id(46)
 
     assert_equal true, invoice.transactions.is_a?(Array)
-    assert_equal 1, invoice.transactions.length
+    assert_equal 2, invoice.transactions.length
     assert_equal 2, invoice.transactions[0].id
   end
 
@@ -71,4 +71,39 @@ class InvoiceTest < Minitest::Test
     assert_equal 1, invoice.items.length
     assert_equal "510+ RealPush Icon Set", invoice.items[0].name
   end
+
+  def test_that_it_can_return_an_array_of_transaction_statuses
+    se = SalesEngine.from_csv({ invoices: "./test/samples/invoices_sample.csv", invoice_items: "./test/samples/invoice_items_sample.csv", items: "./test/samples/item_sample.csv", transactions: "./test/samples/transactions_sample.csv"})
+    invoice = se.invoices.find_by_id(46)
+    transactions = invoice.transactions
+
+    assert_equal true, invoice.check_results(transactions).is_a?(Array)
+    assert_equal 1, invoice.check_results(transactions).length
+  end
+
+  def test_that_it_can_determine_if_invoice_is_paid_in_full
+    se = SalesEngine.from_csv({ invoices: "./test/samples/invoices_sample.csv", invoice_items: "./test/samples/invoice_items_sample.csv", items: "./test/samples/item_sample.csv", transactions: "./test/samples/transactions_sample.csv"})
+    invoice1 = se.invoices.find_by_id(46)
+    invoice2 = se.invoices.find_by_id(14)
+
+    assert_equal true, invoice1.is_paid_in_full?
+    assert_equal false, invoice2.is_paid_in_full?
+  end
+
+  def test_that_invoice_can_point_to_its_invoice_items
+    se = SalesEngine.from_csv({ invoices: "./test/samples/invoices_sample.csv", customers: "./test/samples/customers_sample.csv", invoice_items: "./test/samples/invoice_items_sample.csv" })
+    invoice = se.invoices.find_by_id(2)
+
+    assert_equal true, invoice.invoice_items.is_a?(Array)
+    assert_equal 4, invoice.invoice_items.length
+  end
+
+  def test_total_calculates_total_invoice_amount
+    se = SalesEngine.from_csv({ invoices: "./test/samples/invoices_sample.csv", customers: "./test/samples/customers_sample.csv", invoice_items: "./test/samples/invoice_items_sample.csv" })
+    invoice = se.invoices.find_by_id(2)
+
+    assert_equal BigDecimal(5289.13, 6), invoice.total
+  end
+
+
 end
