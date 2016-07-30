@@ -2,13 +2,15 @@ require_relative '../lib/sales_engine'
 require_relative '../lib/merchant_analyst'
 require_relative '../lib/item_analyst'
 require_relative '../lib/invoice_analyst'
+require_relative '../lib/customer_analyst'
 require 'pry'
 
 class SalesAnalyst
   attr_reader :sales_engine,
               :item_analyst,
               :merchant_analyst,
-              :invoice_analyst
+              :invoice_analyst,
+              :customer_analyst
 
   extend Forwardable
 
@@ -28,11 +30,14 @@ class SalesAnalyst
   def_delegators :@invoice_analyst,  :top_days_by_invoice_count,
                                      :invoice_status
 
+  def_delegators :@customer_analyst, :top_buyers
+
   def initialize(sales_engine)
     @sales_engine = sales_engine
     @item_analyst = ItemAnalyst.new(all_items)
     @merchant_analyst = MerchantAnalyst.new(all_merchants)
     @invoice_analyst = InvoiceAnalyst.new(all_invoices)
+    @customer_analyst = CustomerAnalyst.new(all_customers)
   end
 
   def all_merchants
@@ -45,6 +50,10 @@ class SalesAnalyst
 
   def all_invoices
     sales_engine.invoices.all
+  end
+
+  def all_customers
+    sales_engine.customers.all
   end
 
 end

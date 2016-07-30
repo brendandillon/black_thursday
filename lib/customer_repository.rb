@@ -4,7 +4,7 @@ class CustomerRepository
   attr_reader :list_of_customers
 
   extend Forwardable
-  def_delegators :@parent_engine, :find_merchants
+  def_delegators :@parent_engine, :find_merchants, :find_invoices_by_customer
 
   def initialize(customers_data, parent_engine)
     @parent_engine = parent_engine

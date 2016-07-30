@@ -23,4 +23,7 @@ class Customer
     end
   end
 
+  def invoices
+    parent_repo.find_invoices_by_customer(id)
+  end
 end
