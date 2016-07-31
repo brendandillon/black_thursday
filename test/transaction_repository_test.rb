@@ -63,14 +63,14 @@ class TransactionRepositoryTest < Minitest::Test
     se = SalesEngine.from_csv({ transactions: "./test/samples/transactions_sample.csv" })
     tr = se.transactions
 
-    assert_equal [], tr.find_all_by_result(:good_enough)
+    assert_equal [], tr.find_all_by_result("good_enough")
   end
 
   def test_that_find_all_by_result_returns_an_array_of_proper_length
     se = SalesEngine.from_csv({ transactions: "./test/samples/transactions_sample.csv" })
     tr = se.transactions
 
-    assert_equal 23, tr.find_all_by_result(:failed).length
+    assert_equal 24, tr.find_all_by_result("failed").length
   end
 
 end

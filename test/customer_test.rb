@@ -51,6 +51,13 @@ class CustomerTest < Minitest::Test
     assert_equal 74, customer.invoices[0].id
   end
 
+  def test_a_customer_knows_how_many_items_it_has_purchased
+    se = SalesEngine.from_csv({ customers: "./test/samples/customers_sample.csv", invoices: "./test/samples/invoices_sample.csv", invoice_items: "./test/samples/invoice_items_sample.csv", merchants: "./test/samples/merchants_sample.csv" })
+    customer = se.customers.find_by_id(3)
+
+    assert_equal 109, customer.items_for_customer.values.reduce(:+)
+  end
+
 
 
 end

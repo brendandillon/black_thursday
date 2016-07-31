@@ -112,7 +112,7 @@ class MerchantAnalystTest < Minitest::Test
     se = SalesEngine.from_csv({ items: "./test/samples/item_sample.csv", merchants: "./test/samples/merchants_sample.csv", invoices: "./test/samples/invoices_sample.csv" })
     ma = SalesAnalyst.new(se).merchant_analyst
 
-    assert_equal 0.4, ma.average_invoices_per_merchant_standard_deviation
+    assert_equal 0.41, ma.average_invoices_per_merchant_standard_deviation
   end
 
   def test_it_can_find_top_merchants_by_invoice_count

@@ -41,7 +41,4 @@ class CustomerAnalystTest < Minitest::Test
     assert_equal "Joey", ca.top_buyers[0].first_name
   end
 
-
-
-
 end
