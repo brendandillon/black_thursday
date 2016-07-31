@@ -52,10 +52,19 @@ class CustomerTest < Minitest::Test
   end
 
   def test_a_customer_knows_how_many_items_it_has_purchased
-    se = SalesEngine.from_csv({ customers: "./test/samples/customers_sample.csv", invoices: "./test/samples/invoices_sample.csv", invoice_items: "./test/samples/invoice_items_sample.csv", merchants: "./test/samples/merchants_sample.csv" })
+    se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", merchants: "./test/better_samples/merchants.csv" })
     customer = se.customers.find_by_id(3)
 
     assert_equal 109, customer.items_for_customer.values.reduce(:+)
+  end
+
+  def test_that_it_can_find_total_items_purchases_per_merchant
+    se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", merchants: "./test/better_samples/merchants.csv" })
+    customer = se.customers.find_by_id(3)
+
+    assert_equal 29, customer.items_for_customer.values[0]
+    assert_equal 41, customer.items_for_customer.values[1]
+    assert_equal 39, customer.items_for_customer.values[2]
   end
 
 

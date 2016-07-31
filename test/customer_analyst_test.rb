@@ -41,4 +41,11 @@ class CustomerAnalystTest < Minitest::Test
     assert_equal "Joey", ca.top_buyers[0].first_name
   end
 
+  def test_that_top_merchant_for_customer_finds_top_merchant
+    se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", merchants: "./test/better_samples/merchants.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv" })
+    ca = SalesAnalyst.new(se).customer_analyst
+
+    assert_equal "FrenchyTrendy", ca.top_merchant_for_customer(3)
+  end
+
 end

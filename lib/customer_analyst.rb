@@ -16,10 +16,18 @@ class CustomerAnalyst
     customer.invoices.map do |invoice|
       invoice.total
     end.uniq.reduce(:+)
-    # customer.invoices.reduce(0) do |amount, invoice|
-    #   amount += invoice.total
-    #   amount
-    # end
   end
+
+  def find_customer(id_to_find)
+      @all_customers.find do |customer|
+        customer.id == id_to_find
+      end
+  end
+
+  def top_merchant_for_customer(customer_id)
+    customer = find_customer(customer_id)
+    customer.items_for_customer.max_by { |key, value| value}[0].name
+  end
+
 
 end
