@@ -24,11 +24,27 @@ class Customer
     end
   end
 
-  def invoices
-    parent_repo.find_invoices_by_customer(id)
+  def items
+    parent_repo.find_items_by_customer(id) do |invoices|
+       return invoices.map do |invoice|
+        invoice.items
+      end.flatten.compact.uniq
+    end
   end
 
-  def items_for_customer
+  def invoices
+    parent_repo.find_invoices_by_customer(id) 
+  end
+
+  def fully_paid_invoices
+    parent_repo.find_invoices_by_customer(id) do |invoices|
+      return invoices.find_all do |invoice|
+        invoice.is_paid_in_full?
+      end
+    end
+  end
+
+  def items_per_merchant
     items_by_merchant = Hash.new {|hash, key| hash[key] = 0}
     parent_repo.find_merchants(id) do |invoices|
       invoices.map do |invoice|
@@ -40,4 +56,6 @@ class Customer
     end
     items_by_merchant
   end
+
+
 end
