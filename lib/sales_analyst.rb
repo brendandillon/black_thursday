@@ -28,7 +28,9 @@ class SalesAnalyst
                    :bottom_merchants_by_invoice_count
 
   def_delegators :@invoice_analyst,  :top_days_by_invoice_count,
-                                     :invoice_status
+                                     :invoice_status,
+                                     :best_invoice_by_revenue,
+                                     :best_invoice_by_quantity
 
   def_delegators :@customer_analyst,
                    :top_buyers,
@@ -37,6 +39,7 @@ class SalesAnalyst
                    :one_time_buyers_items,
                    :items_bought_in_year,
                    :customers_with_unpaid_invoices
+
 
 
   def initialize(sales_engine)
