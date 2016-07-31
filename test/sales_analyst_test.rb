@@ -27,4 +27,11 @@ class SalesAnalystTest < Minitest::Test
     assert_equal 100, sa.all_invoices.length
   end
 
+  def test_it_can_find_all_customers
+    se = SalesEngine.from_csv({ customers: "./test/samples/customers_sample.csv" })
+    sa = SalesAnalyst.new(se)
+    assert_equal 100, sa.all_customers.length
+  end
+
+
 end
