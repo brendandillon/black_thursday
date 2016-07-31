@@ -27,5 +27,19 @@ class InvoiceAnalystTest < Minitest::Test
     assert_equal 8.00, ina.invoice_status(:returned)
   end
 
+  def test_best_invoice_by_revenue_finds_highest_grossing_invoice
+    se = SalesEngine.from_csv({ items: "./test/better_samples/items.csv", merchants: "./test/better_samples/merchants.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", transactions: "./test/better_samples/transactions.csv" })
+    ina = SalesAnalyst.new(se).invoice_analyst
+
+    assert_equal 22, ina.best_invoice_by_revenue.id
+  end
+
+  def test_best_invoice_by_quantity_finds_invoice_with_most_items
+    se = SalesEngine.from_csv({ items: "./test/better_samples/items.csv", merchants: "./test/better_samples/merchants.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", transactions: "./test/better_samples/transactions.csv" })
+    ina = SalesAnalyst.new(se).invoice_analyst
+
+    assert_equal 1, ina.best_invoice_by_quantity.id
+  end
+
 
 end

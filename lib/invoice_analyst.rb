@@ -45,4 +45,24 @@ class InvoiceAnalyst
      ((matching_invoices.length.to_f / @all_invoices.length) * 100).round(2)
    end
 
+   def best_invoice_by_revenue
+     invoices_paid = @all_invoices.find_all do |invoice|
+       invoice.is_paid_in_full?
+     end
+     invoices_paid.max_by do |invoice|
+       invoice.total
+     end
+   end
+
+   def best_invoice_by_quantity
+     invoices_paid = @all_invoices.find_all do |invoice|
+       invoice.is_paid_in_full?
+     end
+     invoices_paid.max_by do |invoice|
+       invoice.invoice_items.reduce(0) do |sum, invoice_item|
+         sum += invoice_item.quantity
+       end
+     end
+   end
+
 end
