@@ -30,7 +30,14 @@ class SalesAnalyst
   def_delegators :@invoice_analyst,  :top_days_by_invoice_count,
                                      :invoice_status
 
-  def_delegators :@customer_analyst, :top_buyers
+  def_delegators :@customer_analyst,
+                   :top_buyers,
+                   :top_merchant_for_customer,
+                   :one_time_buyers,
+                   :one_time_buyers_items,
+                   :items_bought_in_year,
+                   :customers_with_unpaid_invoices
+
 
   def initialize(sales_engine)
     @sales_engine = sales_engine

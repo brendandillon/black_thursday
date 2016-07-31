@@ -23,6 +23,7 @@ class SalesEngine
   def_delegator :@invoices, :find_all_by_merchant_id, :find_customers
   def_delegator :@invoices, :find_all_by_customer_id, :find_merchants
   def_delegator :@invoices, :find_all_by_customer_id, :find_invoices_by_customer
+  def_delegator :@invoices, :find_all_by_customer_id, :find_items_by_customer
   def_delegator :@transactions, :find_all_by_invoice_id, :find_transactions
   def_delegator :@customers, :find_by_id, :find_customer
   def_delegator :@invoice_items, :find_all_by_invoice_id, :find_invoice_items

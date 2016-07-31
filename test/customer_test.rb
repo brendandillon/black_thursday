@@ -43,29 +43,48 @@ class CustomerTest < Minitest::Test
   end
 
   def test_that_a_customer_points_to_its_invoices
-    se = SalesEngine.from_csv({ customers: "./test/samples/customers_sample.csv", invoices: "./test/samples/invoices_sample.csv" })
-    customer = se.customers.find_by_id(14)
+    se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", invoices: "./test/better_samples/invoices.csv", transactions: "./test/better_samples/transactions.csv" })
+    customer = se.customers.find_by_id(1)
 
     assert_equal true, customer.invoices.is_a?(Array)
-    assert_equal 5, customer.invoices.length
-    assert_equal 74, customer.invoices[0].id
+    assert_equal 8, customer.invoices.length
+    assert_equal 1, customer.invoices[0].id
+  end
+
+  def test_that_a_customer_points_to_its_fully_paid_invoices
+    se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", invoices: "./test/better_samples/invoices.csv", transactions: "./test/better_samples/transactions.csv" })
+    customer = se.customers.find_by_id(1)
+
+    assert_equal true, customer.fully_paid_invoices.is_a?(Array)
+    assert_equal 6, customer.fully_paid_invoices.length
+    assert_equal 1, customer.fully_paid_invoices[0].id
   end
 
   def test_a_customer_knows_how_many_items_it_has_purchased
     se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", merchants: "./test/better_samples/merchants.csv" })
     customer = se.customers.find_by_id(3)
 
-    assert_equal 109, customer.items_for_customer.values.reduce(:+)
+    assert_equal 109, customer.items_per_merchant.values.reduce(:+)
   end
 
   def test_that_it_can_find_total_items_purchases_per_merchant
     se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", merchants: "./test/better_samples/merchants.csv" })
     customer = se.customers.find_by_id(3)
 
-    assert_equal 29, customer.items_for_customer.values[0]
-    assert_equal 41, customer.items_for_customer.values[1]
-    assert_equal 39, customer.items_for_customer.values[2]
+    assert_equal 29, customer.items_per_merchant.values[0]
+    assert_equal 41, customer.items_per_merchant.values[1]
+    assert_equal 39, customer.items_per_merchant.values[2]
   end
+
+  def test_it_knows_which_items_it_purchased
+    se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", merchants: "./test/better_samples/merchants.csv", items: "./test/better_samples/items.csv" })
+    customer = se.customers.find_by_id(3)
+
+    assert_equal Item, customer.items[0].class
+    assert_equal true, customer.items.is_a?(Array)
+  end
+
+
 
 
 
