@@ -35,11 +35,11 @@ class InvoiceItemRepository
   end
 
   def find_all_by_invoice_id(invoice_id_to_find)
-    all_invoice_items_for_invoice = @list_of_invoice_items.find_all do |invoice_item|
+    relevant_invoice_items = @list_of_invoice_items.find_all do |invoice_item|
       invoice_item.invoice_id == invoice_id_to_find
     end
-    yield(all_invoice_items_for_invoice) if block_given?
-    all_invoice_items_for_invoice
+    yield(relevant_invoice_items) if block_given?
+    relevant_invoice_items
   end
 
   # just for the spec harness

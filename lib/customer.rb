@@ -33,7 +33,7 @@ class Customer
   end
 
   def invoices
-    parent_repo.find_invoices_by_customer(id) 
+    parent_repo.find_invoices_by_customer(id)
   end
 
   def fully_paid_invoices
@@ -48,9 +48,10 @@ class Customer
     items_by_merchant = Hash.new {|hash, key| hash[key] = 0}
     parent_repo.find_merchants(id) do |invoices|
       invoices.map do |invoice|
-        items_by_merchant[invoice.merchant] += invoice.invoice_items.reduce(0) do |count, invoice_item|
-          count += invoice_item.quantity
-          count
+        items_by_merchant[invoice.merchant] +=
+          invoice.invoice_items.reduce(0) do |count, invoice_item|
+            count += invoice_item.quantity
+            count
         end
       end
     end
