@@ -76,6 +76,27 @@ class CustomerAnalyst
     end
   end
 
+  def most_recent_invoices(customer)
+    customer.fully_paid_invoices.reduce(Array.new) do |recent_invoices, invoice|
+      if recent_invoices == []
+        recent_invoices << invoice
+      elsif invoice.updated_at > recent_invoices[0].updated_at
+        recent_invoices = [invoice]
+      elsif invoice.updated_at == recent_invoices[0].updated_at
+        recent_invoices << invoice
+      end
+      recent_invoices
+    end
+  end
+
+  def most_recently_bought_items(customer_id)
+    customer = find_customer(customer_id)
+    most_recent_invoices(customer).map do |invoice|
+      invoice.items
+    end.flatten
+  end
+
+
   def customers_with_unpaid_invoices
     @all_customers.find_all do |customer|
       customer.invoices != customer.fully_paid_invoices
