@@ -32,6 +32,14 @@ class Customer
     end
   end
 
+  def invoice_items
+    parent_repo.find_items_by_customer(id) do |invoices|
+       return invoices.map do |invoice|
+        invoice.invoice_items
+      end.flatten.compact.uniq
+    end
+  end
+
   def invoices
     parent_repo.find_invoices_by_customer(id)
   end
@@ -45,7 +53,7 @@ class Customer
   end
 
   def items_per_merchant
-    items_by_merchant = Hash.new {|hash, key| hash[key] = 0}
+    items_by_merchant = Hash.new {0}
     parent_repo.find_merchants(id) do |invoices|
       invoices.map do |invoice|
         items_by_merchant[invoice.merchant] +=

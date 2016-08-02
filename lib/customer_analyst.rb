@@ -19,9 +19,9 @@ class CustomerAnalyst
   end
 
   def find_customer(id_to_find)
-      @all_customers.find do |customer|
-        customer.id == id_to_find
-      end
+    @all_customers.find do |customer|
+      customer.id == id_to_find
+    end
   end
 
   def top_merchant_for_customer(customer_id)
@@ -36,23 +36,45 @@ class CustomerAnalyst
   end
 
   def one_time_buyers_items
-    otb_items = one_time_buyers[0].items
-    one_time_buyers.each do |buyer|
-      otb_items.delete_if do |item|
-        buyer.items.include?(item)
-      end
+    # otb_items = one_time_buyers[0].items
+    # one_time_buyers.each do |buyer|
+    #   otb_items.delete_if do |item|
+    #     buyer.items.include?(item)
+    #   end
+    # end
+    # return otb_items
+
+    all_items = one_time_buyers.map do |buyer|
+      # buyer.invoices.map do |invoice|
+      #   invoice.invoice_items
+      # end
+      buyer.items
+    end.flatten
+
+    # items_per_count = all_items.reduce(Hash.new {0}) do |items_by_count, invoice_item|
+    #   items_by_count[invoice_item.item] += invoice_item.quantity
+    #   items_by_count
+    items_per_count = all_items.reduce(Hash.new {0}) do |items_by_count, item|
+      items_by_count[item] += 1
+      items_by_count
     end
-    return otb_items
+
+    items_per_count.group_by do |item, count|
+      count
+    end.max
   end
 
   def items_bought_in_year(customer_id, year)
     customer = find_customer(customer_id)
-    invoices_in_year = customer.fully_paid_invoices.find_all do |invoice|
-      invoice.created_at.year == year
-    end
-    invoices_in_year.map do |invoice|
+    invoices_in_year(year, customer).map do |invoice|
       invoice.items
     end.flatten
+  end
+
+  def invoices_in_year(year, customer)
+    customer.fully_paid_invoices.find_all do |invoice|
+      invoice.created_at.year == year
+    end
   end
 
   def customers_with_unpaid_invoices

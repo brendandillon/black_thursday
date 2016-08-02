@@ -9,7 +9,7 @@ class InvoiceAnalyst
   end
 
   def invoices_per_day
-    yup = @all_invoices.reduce(Array.new(7) {0}) do |days, invoice|
+    @all_invoices.reduce(Array.new(7) {0}) do |days, invoice|
       days[invoice.created_at.wday] += 1
       days
     end
@@ -45,20 +45,20 @@ class InvoiceAnalyst
      ((matching_invoices.length.to_f / @all_invoices.length) * 100).round(2)
    end
 
-   def best_invoice_by_revenue
-     invoices_paid = @all_invoices.find_all do |invoice|
+   def fully_paid_invoices
+     @all_invoices.find_all do |invoice|
        invoice.is_paid_in_full?
      end
-     invoices_paid.max_by do |invoice|
+   end
+
+   def best_invoice_by_revenue
+     fully_paid_invoices.max_by do |invoice|
        invoice.total
      end
    end
 
    def best_invoice_by_quantity
-     invoices_paid = @all_invoices.find_all do |invoice|
-       invoice.is_paid_in_full?
-     end
-     invoices_paid.max_by do |invoice|
+     fully_paid_invoices.max_by do |invoice|
        invoice.invoice_items.reduce(0) do |sum, invoice_item|
          sum += invoice_item.quantity
        end

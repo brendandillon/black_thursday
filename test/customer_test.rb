@@ -84,8 +84,12 @@ class CustomerTest < Minitest::Test
     assert_equal true, customer.items.is_a?(Array)
   end
 
+  def test_a_customer_points_to_its_invoice_items
+    se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", merchants: "./test/better_samples/merchants.csv", items: "./test/better_samples/items.csv" })
+    customer = se.customers.find_by_id(3)
 
-
-
+    assert_equal InvoiceItem, customer.invoice_items[0].class
+    assert_equal true, customer.invoice_items.is_a?(Array)
+  end
 
 end

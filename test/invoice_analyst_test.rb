@@ -41,5 +41,11 @@ class InvoiceAnalystTest < Minitest::Test
     assert_equal 1, ina.best_invoice_by_quantity.id
   end
 
+  def test_it_can_find_fully_paid_invoices
+    se = SalesEngine.from_csv({ items: "./test/better_samples/items.csv", merchants: "./test/better_samples/merchants.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", transactions: "./test/better_samples/transactions.csv" })
+    ina = SalesAnalyst.new(se).invoice_analyst
+
+    assert_equal 17, ina.fully_paid_invoices.length
+  end
 
 end
