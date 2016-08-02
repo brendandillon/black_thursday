@@ -57,23 +57,45 @@ class CustomerAnalystTest < Minitest::Test
     assert_equal "Mariah", ca.one_time_buyers[0].first_name
   end
 
-  def test_that_one_time_buyers_item_finds_most_bought_items_of_otbs
-    skip
+
+  def test_that_all_one_time_buyers_items_maps_all_otb_items_into_an_array
     se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", merchants: "./test/better_samples/merchants.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", items: "./test/better_samples/items.csv", transactions: "./test/better_samples/transactions.csv" })
     ca = SalesAnalyst.new(se).customer_analyst
 
-    assert_equal true, ca.one_time_buyers_items.is_a?(Array)
-    assert_equal 23, ca.one_time_buyers_items.length
+    assert_equal true, ca.all_one_time_buyers_items.is_a?(Array)
+    assert_equal 26, ca.all_one_time_buyers_items.length
+    assert_equal true, ca.all_one_time_buyers_items[0].is_a?(Item)
   end
 
-  def test_that_one_time_buyers_item_finds_most_bought_items_of_otbs_1
-    skip
-    se = SalesEngine.from_csv({ customers: "./data/customers.csv", merchants: "./data/merchants.csv", invoices: "./data/invoices.csv", invoice_items: "./data/invoice_items.csv", items: "./data/items.csv", transactions: "./data/transactions.csv" })
+  def test_that_one_time_buyers_item_count_creates_a_hash_to_point_items_to_their_count
+    se = SalesEngine.new({})
     ca = SalesAnalyst.new(se).customer_analyst
+    items = ["a" ,"a" ,"a", "b","b" ,"c"]
+    item_count = { "a" => 3, "b" => 2, "c" => 1 }
 
-    # assert_equal true, ca.one_time_buyers_items.is_a?(Array)
-    # assert_equal 26, ca.one_time_buyers_items.length
-    assert_equal [], ca.one_time_buyers_items
+    assert_equal true, ca.one_time_buyers_item_count(items).is_a?(Hash)
+    assert_equal 3, ca.one_time_buyers_item_count(items).length
+    assert_equal item_count, ca.one_time_buyers_item_count(items)
+  end
+
+  def test_that_it_can_group_one_time_buyers_group_by_count
+    se = SalesEngine.new({})
+    ca = SalesAnalyst.new(se).customer_analyst
+    item_count = { "a" => 2, "b" => 2, "c" => 1 }
+    item_count_group = { 2 => ["a", "b"], 1 => ["c"]}
+
+    assert_equal true, ca.one_time_buyers_group_by_count(item_count).is_a?(Hash)
+    assert_equal item_count_group, ca.one_time_buyers_group_by_count(item_count)
+  end
+
+  def test_that_one_time_buyers_item_finds_item_most_otbs_bought
+    se = SalesEngine.new({})
+    ca = SalesAnalyst.new(se).customer_analyst
+    item_count = { "a" => 2, "b" => 2, "c" => 1 }
+    item_count_group = { 2 => ["a", "b"], 1 => ["c"]}
+    ca.stub :one_time_buyers_group_by_count, { 2 => ["a", "b"], 1 => ["c"]} do
+      assert_equal ["a", "b"], ca.one_time_buyers_items
+    end
   end
 
   def test_items_bought_in_year_finds_number_items_bought_for_given_year

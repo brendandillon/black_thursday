@@ -35,33 +35,32 @@ class CustomerAnalyst
     end
   end
 
-  def one_time_buyers_items
-    # otb_items = one_time_buyers[0].items
-    # one_time_buyers.each do |buyer|
-    #   otb_items.delete_if do |item|
-    #     buyer.items.include?(item)
-    #   end
-    # end
-    # return otb_items
-
-    all_items = one_time_buyers.map do |buyer|
-      # buyer.invoices.map do |invoice|
-      #   invoice.invoice_items
-      # end
+  def all_one_time_buyers_items
+    one_time_buyers.map do |buyer|
       buyer.items
     end.flatten
+  end
 
-    # items_per_count = all_items.reduce(Hash.new {0}) do |items_by_count, invoice_item|
-    #   items_by_count[invoice_item.item] += invoice_item.quantity
-    #   items_by_count
-    items_per_count = all_items.reduce(Hash.new {0}) do |items_by_count, item|
-      items_by_count[item] += 1
-      items_by_count
+  def one_time_buyers_item_count(items)
+    items.reduce(Hash.new {0}) do |item_count, item|
+      item_count[item] += 1
+      item_count
     end
+  end
 
-    items_per_count.group_by do |item, count|
-      count
-    end.max
+  def one_time_buyers_group_by_count(items_per_count)
+    items_per_count.reduce(Hash.new) do |group, (item, count)|
+      if group[count] == nil
+        group[count] = [item]
+      else
+      group[count] << item
+    end
+      group
+    end
+  end
+
+  def one_time_buyers_items
+    one_time_buyers_group_by_count(one_time_buyers_item_count(all_one_time_buyers_items)).max[1]
   end
 
   def items_bought_in_year(customer_id, year)
