@@ -113,6 +113,26 @@ class CustomerAnalystTest < Minitest::Test
     assert_equal 1, ca.invoices_in_year(2012, customer).length
   end
 
+  def test_that_it_can_find_most_recent_invoices
+    se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", merchants: "./test/better_samples/merchants.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", items: "./test/better_samples/items.csv", transactions: "./test/better_samples/transactions.csv" })
+    ca = SalesAnalyst.new(se).customer_analyst
+    customer = ca.find_customer(5)
+
+    assert_equal true, ca.most_recent_invoices(customer).is_a?(Array)
+    assert_equal 1, ca.most_recent_invoices(customer).length
+    assert_equal 17, ca.most_recent_invoices(customer)[0].id
+  end
+
+  def test_that_it_can_find_most_recently_bought_items
+    se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", merchants: "./test/better_samples/merchants.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", items: "./test/better_samples/items.csv", transactions: "./test/better_samples/transactions.csv" })
+    ca = SalesAnalyst.new(se).customer_analyst
+    customer = ca.find_customer(5)
+
+    assert_equal true, ca.most_recently_bought_items(5).is_a?(Array)
+    assert_equal 4, ca.most_recently_bought_items(5).length
+    assert_equal 263424379, ca.most_recently_bought_items(5)[0].id
+  end
+
   def test_customers_with_unpaid_invoices_finds_customers_who_have_invoices_not_paid_in_full
     se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", merchants: "./test/better_samples/merchants.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", items: "./test/better_samples/items.csv", transactions: "./test/better_samples/transactions.csv" })
     ca = SalesAnalyst.new(se).customer_analyst
