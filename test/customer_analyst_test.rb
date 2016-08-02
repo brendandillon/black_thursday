@@ -58,10 +58,21 @@ class CustomerAnalystTest < Minitest::Test
   end
 
   def test_that_one_time_buyers_item_finds_most_bought_items_of_otbs
+    skip
     se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", merchants: "./test/better_samples/merchants.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", items: "./test/better_samples/items.csv", transactions: "./test/better_samples/transactions.csv" })
     ca = SalesAnalyst.new(se).customer_analyst
 
     assert_equal true, ca.one_time_buyers_items.is_a?(Array)
+    assert_equal 23, ca.one_time_buyers_items.length
+  end
+
+  def test_that_one_time_buyers_item_finds_most_bought_items_of_otbs_1
+    skip
+    se = SalesEngine.from_csv({ customers: "./data/customers.csv", merchants: "./data/merchants.csv", invoices: "./data/invoices.csv", invoice_items: "./data/invoice_items.csv", items: "./data/items.csv", transactions: "./data/transactions.csv" })
+    ca = SalesAnalyst.new(se).customer_analyst
+
+    # assert_equal true, ca.one_time_buyers_items.is_a?(Array)
+    # assert_equal 26, ca.one_time_buyers_items.length
     assert_equal [], ca.one_time_buyers_items
   end
 
@@ -72,6 +83,14 @@ class CustomerAnalystTest < Minitest::Test
     assert_equal 1, ca.items_bought_in_year(5, 2012).length
   end
 
+  def test_it_can_find_all_invoices_in_a_year
+    se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", merchants: "./test/better_samples/merchants.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", items: "./test/better_samples/items.csv", transactions: "./test/better_samples/transactions.csv" })
+    ca = SalesAnalyst.new(se).customer_analyst
+    customer = ca.find_customer(5)
+
+    assert_equal 1, ca.invoices_in_year(2012, customer).length
+  end
+
   def test_customers_with_unpaid_invoices_finds_customers_who_have_invoices_not_paid_in_full
     se = SalesEngine.from_csv({ customers: "./test/better_samples/customers.csv", merchants: "./test/better_samples/merchants.csv", invoices: "./test/better_samples/invoices.csv", invoice_items: "./test/better_samples/invoice_items.csv", items: "./test/better_samples/items.csv", transactions: "./test/better_samples/transactions.csv" })
     ca = SalesAnalyst.new(se).customer_analyst
@@ -79,7 +98,5 @@ class CustomerAnalystTest < Minitest::Test
     assert_equal true, ca.customers_with_unpaid_invoices.is_a?(Array)
     assert_equal 4, ca.customers_with_unpaid_invoices.length
   end
-
-
 
 end
