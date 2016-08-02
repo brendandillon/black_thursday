@@ -79,6 +79,7 @@ The sales analyst is able to run the following analytic methods:
 * one_time_buyers_items
 * items_bought_in_year
 * customers_with_unpaid_invoices
+
 ***
 ## Authors
 Brian Heim  
