@@ -1,9 +1,9 @@
 require_relative '../lib/statistics'
+
 class ItemAnalyst
+  attr_reader :all_items
 
   include Statistics
-
-  attr_reader :all_items
 
   def initialize(all_items)
     @all_items = all_items

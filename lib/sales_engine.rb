@@ -7,7 +7,8 @@ require_relative '../lib/transaction_repository'
 require_relative '../lib/customer_repository'
 
 class SalesEngine
-  attr_reader :items,
+  attr_reader :list_of_paths,
+              :items,
               :merchants,
               :invoices,
               :invoice_items,
@@ -67,18 +68,10 @@ class SalesEngine
   end
 
   def read_data(what_to_read)
-    return [] if @list_of_paths[what_to_read].nil?
-    CSV.read(@list_of_paths[what_to_read],
+    return [] if list_of_paths[what_to_read].nil?
+    CSV.read(list_of_paths[what_to_read],
              headers: true,
              header_converters: :symbol)
-  end
-
-  def find_items(id)
-    items.find_all_by_merchant_id(id)
-  end
-
-  def find_merchant(merchant_id)
-    merchants.find_by_id(merchant_id)
   end
 
 end

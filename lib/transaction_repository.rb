@@ -22,25 +22,25 @@ class TransactionRepository
   end
 
   def find_by_id(id_to_find)
-    @list_of_transactions.find do |transaction|
+    list_of_transactions.find do |transaction|
       transaction.id == id_to_find
     end
   end
 
   def find_all_by_invoice_id(invoice_id_to_find)
-    @list_of_transactions.find_all do |transaction|
+    list_of_transactions.find_all do |transaction|
       transaction.invoice_id == invoice_id_to_find
     end
   end
 
   def find_all_by_credit_card_number(credit_card_number_to_find)
-    @list_of_transactions.find_all do |transaction|
+    list_of_transactions.find_all do |transaction|
       transaction.credit_card_number == credit_card_number_to_find
     end
   end
 
   def find_all_by_result(result_to_find)
-    @list_of_transactions.find_all do |transaction|
+    list_of_transactions.find_all do |transaction|
       transaction.result == result_to_find
     end
   end

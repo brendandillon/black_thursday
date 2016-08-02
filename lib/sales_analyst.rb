@@ -3,7 +3,6 @@ require_relative '../lib/merchant_analyst'
 require_relative '../lib/item_analyst'
 require_relative '../lib/invoice_analyst'
 require_relative '../lib/customer_analyst'
-require 'pry'
 
 class SalesAnalyst
   attr_reader :sales_engine,

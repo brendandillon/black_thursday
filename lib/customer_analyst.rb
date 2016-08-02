@@ -19,7 +19,7 @@ class CustomerAnalyst
   end
 
   def find_customer(id_to_find)
-    @all_customers.find do |customer|
+    all_customers.find do |customer|
       customer.id == id_to_find
     end
   end
@@ -30,7 +30,7 @@ class CustomerAnalyst
   end
 
   def one_time_buyers
-    @all_customers.find_all do |customer|
+    all_customers.find_all do |customer|
       customer.fully_paid_invoices.length == 1
     end
   end
@@ -53,14 +53,16 @@ class CustomerAnalyst
       if group[count] == nil
         group[count] = [item]
       else
-      group[count] << item
-    end
+        group[count] << item
+      end
       group
     end
   end
 
   def one_time_buyers_items
-    one_time_buyers_group_by_count(one_time_buyers_item_count(all_one_time_buyers_items)).max[1]
+    one_time_buyers_group_by_count(
+    one_time_buyers_item_count(
+    all_one_time_buyers_items)).max[1]
   end
 
   def items_bought_in_year(customer_id, year)
@@ -96,12 +98,10 @@ class CustomerAnalyst
     end.flatten
   end
 
-
   def customers_with_unpaid_invoices
-    @all_customers.find_all do |customer|
+    all_customers.find_all do |customer|
       customer.invoices != customer.fully_paid_invoices
     end
   end
-
 
 end
