@@ -1,4 +1,5 @@
 require_relative '../lib/merchant'
+
 class MerchantRepository
   attr_reader :list_of_merchants,
               :parent_engine
@@ -22,19 +23,19 @@ class MerchantRepository
   end
 
   def find_by_id(id_to_find)
-    @list_of_merchants.find do |merchant|
+    list_of_merchants.find do |merchant|
       merchant.id == id_to_find
     end
   end
 
   def find_by_name(name_to_find)
-    @list_of_merchants.find do |merchant|
+    list_of_merchants.find do |merchant|
       merchant.name.downcase == name_to_find.downcase
     end
   end
 
   def find_all_by_name(name_fragment_to_find)
-    @list_of_merchants.find_all do |merchant|
+    list_of_merchants.find_all do |merchant|
       merchant.name.downcase.include?(name_fragment_to_find.downcase)
     end
   end
@@ -42,4 +43,5 @@ class MerchantRepository
   # just for the spec harness
   def inspect
   end
+
 end

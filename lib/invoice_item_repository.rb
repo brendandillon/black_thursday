@@ -1,4 +1,5 @@
 require_relative '../lib/invoice_item'
+
 class InvoiceItemRepository
   attr_reader :list_of_invoice_items,
               :parent_engine
@@ -23,19 +24,19 @@ class InvoiceItemRepository
   end
 
   def find_by_id(id_to_find)
-    @list_of_invoice_items.find do |invoice_item|
+    list_of_invoice_items.find do |invoice_item|
       invoice_item.id == id_to_find
     end
   end
 
   def find_all_by_item_id(item_id_to_find)
-    @list_of_invoice_items.find_all do |invoice_item|
+    list_of_invoice_items.find_all do |invoice_item|
       invoice_item.item_id == item_id_to_find
     end
   end
 
   def find_all_by_invoice_id(invoice_id_to_find)
-    relevant_invoice_items = @list_of_invoice_items.find_all do |invoice_item|
+    relevant_invoice_items = list_of_invoice_items.find_all do |invoice_item|
       invoice_item.invoice_id == invoice_id_to_find
     end
     yield(relevant_invoice_items) if block_given?

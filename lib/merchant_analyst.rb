@@ -1,6 +1,7 @@
 require_relative '../lib/statistics'
-require 'pry'
+
 class MerchantAnalyst
+  attr_reader :all_merchants
 
   include Statistics
 
@@ -9,13 +10,13 @@ class MerchantAnalyst
   end
 
   def active_merchants
-    @all_merchants.find_all do |merchant|
+    all_merchants.find_all do |merchant|
       average_item_price_for_merchant(merchant.id) != nil
     end
   end
 
   def find_merchant(id_to_find)
-    @all_merchants.find do |merchant|
+    all_merchants.find do |merchant|
       merchant.id == id_to_find
     end
   end
@@ -25,7 +26,7 @@ class MerchantAnalyst
   end
 
   def items_per_merchant
-    @all_merchants.map do |merchant|
+    all_merchants.map do |merchant|
       merchant.items.count
     end
   end
@@ -46,7 +47,7 @@ class MerchantAnalyst
   def merchants_with_high_item_count
     avg = average_items_per_merchant
     std_dev = average_items_per_merchant_standard_deviation
-    @all_merchants.find_all do |merchant|
+    all_merchants.find_all do |merchant|
       merchant.items.count > (avg + std_dev)
     end
   end
@@ -68,7 +69,7 @@ class MerchantAnalyst
   end
 
   def average_average_price_per_merchant
-    return nil if @all_merchants == [] || active_merchants == []
+    return nil if all_merchants == [] || active_merchants == []
 
     (total_item_price_for_active_merchants /
     active_merchants.length).
@@ -87,7 +88,7 @@ class MerchantAnalyst
   end
 
   def invoices_per_merchant
-    @all_merchants.map do |merchant|
+    all_merchants.map do |merchant|
       merchant.invoices.count
     end
   end
@@ -99,7 +100,7 @@ class MerchantAnalyst
   def top_merchants_by_invoice_count
     avg = average_invoices_per_merchant
     std_dev = average_invoices_per_merchant_standard_deviation
-    @all_merchants.find_all do |merchant|
+    all_merchants.find_all do |merchant|
       merchant.invoices.count > (avg + (std_dev * 2))
     end
   end
@@ -107,7 +108,7 @@ class MerchantAnalyst
   def bottom_merchants_by_invoice_count
     avg = average_invoices_per_merchant
     std_dev = average_invoices_per_merchant_standard_deviation
-    @all_merchants.find_all do |merchant|
+    all_merchants.find_all do |merchant|
       merchant.invoices.count < (avg - (std_dev * 2))
     end
   end

@@ -1,6 +1,7 @@
 require_relative '../lib/statistics'
-require 'pry'
+
 class InvoiceAnalyst
+  attr_reader :all_invoices
 
   include Statistics
 
@@ -9,7 +10,7 @@ class InvoiceAnalyst
   end
 
   def invoices_per_day
-    @all_invoices.reduce(Array.new(7) {0}) do |days, invoice|
+    all_invoices.reduce(Array.new(7) {0}) do |days, invoice|
       days[invoice.created_at.wday] += 1
       days
     end
@@ -39,14 +40,14 @@ class InvoiceAnalyst
    end
 
    def invoice_status(status_to_find)
-     matching_invoices = @all_invoices.find_all do |invoice|
+     matching_invoices = all_invoices.find_all do |invoice|
        invoice.status == status_to_find
      end
-     ((matching_invoices.length.to_f / @all_invoices.length) * 100).round(2)
+     ((matching_invoices.length.to_f / all_invoices.length) * 100).round(2)
    end
 
    def fully_paid_invoices
-     @all_invoices.find_all do |invoice|
+     all_invoices.find_all do |invoice|
        invoice.is_paid_in_full?
      end
    end

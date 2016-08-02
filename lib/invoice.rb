@@ -1,6 +1,4 @@
-require 'pry'
 class Invoice
-
   attr_reader :id,
               :customer_id,
               :merchant_id,
@@ -59,7 +57,5 @@ class Invoice
       amount
     end
   end
-
-
 
 end
