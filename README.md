@@ -69,6 +69,7 @@ The sales analyst is able to run the following analytic methods:
 * average_invoices_per_merchant_standard_deviation
 * top_merchants_by_invoice_count
 * bottom_merchants_by_invoice_count
+* stupid_merchants
 * top_days_by_invoice_count
 * invoice_status
 * best_invoice_by_revenue
