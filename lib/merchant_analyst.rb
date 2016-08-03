@@ -113,4 +113,31 @@ class MerchantAnalyst
     end
   end
 
+  def convert_to_date(expiration_date)
+    month = expiration_date[0..1]
+    year = expiration_date[2..3]
+    year.prepend("20")
+    Time.gm(year, month)
+  end
+
+  def bad_transactions?(invoice)
+    invoice.transactions.any? do |transaction|
+      (transaction.updated_at >
+      convert_to_date(transaction.credit_card_expiration_date)) &&
+      (transaction.result == "success")
+    end
+  end
+
+  def successful_but_expired?(merchant)
+    merchant.invoices.any? do |invoice|
+      bad_transactions?(invoice)
+    end
+  end
+
+  def stupid_merchants
+    all_merchants.find_all do |merchant|
+      successful_but_expired?(merchant)
+    end
+  end
+
 end

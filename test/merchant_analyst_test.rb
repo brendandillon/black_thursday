@@ -131,4 +131,36 @@ class MerchantAnalystTest < Minitest::Test
     end
   end
 
+  def test_it_can_convert_expiration_date_to_time_instance
+    se = SalesEngine.from_csv({ items: "./test/samples/item_sample.csv", merchants: "./test/samples/merchants_sample.csv", invoices: "./test/samples/invoices_sample.csv" })
+    ma = SalesAnalyst.new(se).merchant_analyst
+
+    assert_equal Time.new(2012, 01, 01, 00, 00, 00, "-00:00"), ma.convert_to_date("0112")
+  end
+
+  def test_it_can_find_bad_transactions
+    se = SalesEngine.from_csv({ items: "./test/better_samples/items.csv", merchants: "./test/better_samples/merchants.csv", invoices: "./test/better_samples/invoices.csv", transactions: "./test/better_samples/transactions.csv" })
+    ma = SalesAnalyst.new(se).merchant_analyst
+    invoice = se.invoices.find_by_id(12)
+
+    assert_equal true, ma.bad_transactions?(invoice)
+  end
+
+  def test_it_can_find_successful_payments_with_expired_card
+    se = SalesEngine.from_csv({ items: "./test/better_samples/items.csv", merchants: "./test/better_samples/merchants.csv", invoices: "./test/better_samples/invoices.csv", transactions: "./test/better_samples/transactions.csv" })
+    ma = SalesAnalyst.new(se).merchant_analyst
+    merchant = se.merchants.find_by_id(12336617)
+
+    assert_equal true, ma.successful_but_expired?(merchant)
+  end
+
+  def test_it_can_find_merchants_accepting_invalid_payment
+    se = SalesEngine.from_csv({ items: "./test/better_samples/items.csv", merchants: "./test/better_samples/merchants.csv", invoices: "./test/better_samples/invoices.csv", transactions: "./test/better_samples/transactions.csv" })
+    ma = SalesAnalyst.new(se).merchant_analyst
+
+    assert_equal true, ma.stupid_merchants.is_a?(Array)
+    assert_equal 1, ma.stupid_merchants.length
+    assert_equal "FullyFashionedKnits", ma.stupid_merchants[0].name
+  end
+
 end
