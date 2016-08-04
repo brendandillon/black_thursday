@@ -37,7 +37,9 @@ class CustomerAnalyst
 
   def all_one_time_buyers_items
     one_time_buyers.map do |buyer|
-      buyer.items
+      buyer.fully_paid_invoices.map do |invoice|
+        invoice.items
+      end
     end.flatten
   end
 

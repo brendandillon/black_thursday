@@ -63,7 +63,7 @@ class CustomerAnalystTest < Minitest::Test
     ca = SalesAnalyst.new(se).customer_analyst
 
     assert_equal true, ca.all_one_time_buyers_items.is_a?(Array)
-    assert_equal 26, ca.all_one_time_buyers_items.length
+    assert_equal 13, ca.all_one_time_buyers_items.length
     assert_equal true, ca.all_one_time_buyers_items[0].is_a?(Item)
   end
 
